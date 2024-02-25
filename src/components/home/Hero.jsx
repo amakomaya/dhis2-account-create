@@ -8,7 +8,6 @@ import emailjs from '@emailjs/browser';
 const Hero = () => {
     const [user, setUser] = useState({
         email: '',
-        phone: '',
     });
 
     const [selectedOrgType, setSelectedOrgType] = useState('');
@@ -27,11 +26,6 @@ const Hero = () => {
         return emailRegex.test(email);
     };
 
-    const validatePhone = (phone) => {
-        const phoneRegex = /^[0-9]{10}$/;
-        return phoneRegex.test(phone);
-    };
-
     const [msg, setMsg] = useState("")
 
     const [text] = useTypewriter({
@@ -44,15 +38,6 @@ const Hero = () => {
     useEffect(() => {
         AOS.init()
     }, [])
-
-    // const handlealert = (e) => {
-    //     e.preventDefault();
-    //     Swal.fire({
-    //         title: "Success !",
-    //         text: "Please verify your email for account activation",
-    //         icon: "success"
-    //     });
-    // }
 
     const sendEmail = (e) => {
         e.preventDefault();
@@ -68,17 +53,6 @@ const Hero = () => {
             return;
         }
 
-        // Validate phone number
-        if (user.phone === '') {
-            setErrors((prevErrors) => ({ ...prevErrors, phone: 'Phone number is required' }));
-            return;
-        }
-
-        if (!validatePhone(user.phone)) {
-            setErrors((prevErrors) => ({ ...prevErrors, phone: 'Invalid phone number' }));
-            return;
-        }
-
         // Validate organization type
         if (selectedOrgType === '') {
             setErrors((prevErrors) => ({ ...prevErrors, organization_type: 'Organization type is required' }));
@@ -91,8 +65,8 @@ const Hero = () => {
             return;
         }
 
-        // If all validations pass, we can proceed with form submission
-
+        // If all validations pass
+        alert(user.email)
         emailjs
             .sendForm('service_lzv5uvt', 'template_82rwkla', form.current, {
                 publicKey: 'QgNcDf6lLYy9ePtdy',
@@ -109,7 +83,6 @@ const Hero = () => {
                     setAgreeTerms(false);
                     setErrors({
                         email: '',
-                        phone: '',
                         organization_type: '',
                         agreeTerms: '',
                     });
@@ -132,7 +105,6 @@ const Hero = () => {
         }));
     };
 
-
     return (
         <>
             <section className="hero-section py-5" id="hero">
@@ -146,9 +118,8 @@ const Hero = () => {
                             <p className="text-secondary">Explore the comprehensive Data Management Solution for HMIS in Nepal using
                                 DHIS2: Register, Cards, and monthly Reports. Get Started for free register your account
                                 establish a data management server. </p>
-
                         </div>
-                        <div className="col-md-4 border pb-5 pt-4 px-4 rounded shadow registration-form" data-aos="zoom-in" data-aos-upoffset="200">
+                        <div className="col-md-4  pb-5 pt-4 px-4 border rounded shadow registration-form" data-aos="zoom-in" data-aos-upoffset="200">
 
                             {(msg !== '')
                                 ?
@@ -163,15 +134,15 @@ const Hero = () => {
                                 <div className="row g-3">
                                     <div className="col-md-12">
                                         <input type="email" className={`form-control custom-form ${errors.email ? 'is-invalid' : ''}`} id='email' name="email" onChange={handleInputChange} value={user.email}
-                                            placeholder="Email address"/>
+                                            placeholder="Enter your email address"/>
                                         {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                                     </div>
 
-                                    <div className="col-md-12">
+                                    {/* <div className="col-md-12">
                                         <input type="text" className={`form-control custom-form ${errors.phone ? 'is-invalid' : ''}`} id='phone' name="phone" onChange={handleInputChange} value={user.phone}
                                             placeholder="Phone number" />
                                         {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
-                                    </div>
+                                    </div> */}
 
 
                                     <div className="col-md-12">
@@ -183,7 +154,7 @@ const Hero = () => {
                                                 setErrors((prevErrors) => ({ ...prevErrors, organization_type: '' }));
                                             }}
                                             value={selectedOrgType}>
-                                            <option selected aria-readonly>Organization type</option>
+                                            <option selected aria-readonly>Select Organization type</option>
                                             <option value="Health">Health</option>
                                             <option value="Education">Education</option>
                                             <option value="Tourism">Tourism</option>

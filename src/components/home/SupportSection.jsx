@@ -49,22 +49,22 @@ function SupportSection() {
                             <div class="mb-4 text-secondary">
                                 <form ref={form} onSubmit={sendEmail}>
                                     <div class="mb-3">
-                                        <input type="text" class="form-control contact-form" id="fname" name="from_name"
-                                            placeholder="your first name" required/>
+                                        <input type="text" class="form-control" id="fname" name="from_name"
+                                            placeholder="Enter your first name * " required/>
                                     </div>
 
                                     <div class="mb-3">
                                         <input type="text" class="form-control contact-form" id="lname" name="lname"
-                                            placeholder="your last name" required/>
+                                            placeholder="Enter your last name *" required/>
                                     </div>
                                     <div class="mb-3">
                                         <input type="email" class="form-control contact-form" id="email" name="from_email"
-                                            placeholder="your email" required/>
+                                            placeholder="Enter your email *" required/>
                                     </div>
 
                                     <div class="col-md-12 mb-3">
                                         <select class="form-select" aria-label="Default select example">
-                                            <option selected>Subject</option>
+                                            <option selected>Select Subject *</option>
                                             <option value="1">Health Facility Setup</option>
                                             <option value="2">Subscription Issues</option>
                                             <option value="3">General Inquery</option>
@@ -72,7 +72,7 @@ function SupportSection() {
                                     </div>
 
                                     <div class="mb-3">
-                                        <textarea class="form-control contact-form" placeholder="your message"
+                                        <textarea class="form-control contact-form" placeholder="Enter your message *"
                                             id="floatingTextarea2" name='message' style={{ height: '150px' }} required></textarea>
                                     </div>
 

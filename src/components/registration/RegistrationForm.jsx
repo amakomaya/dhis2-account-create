@@ -13,14 +13,17 @@ import municipalitiesData from '../../data/municipalitiesData';
 
 function RegistrationForm() {
 
-    // const [phone, setPhone] = useState();
     const [user, setUser] = useState(null);
-    const [otp, setOtp] = useState("");
     const [verifyStatus, setVerifyStatus] = useState(false)
 
+
     const [lastRequestTime, setLastRequestTime] = useState(null);
-    const [message, setMessage] = useState('');
-    const [status, setStatus] = useState(false)
+
+    const [phoneHide, setPhoneHide] = useState(true)
+    const [status, setStatus] = useState(false);
+
+
+    const [showRemainingServices, setShowRemainingServices] = useState(false);
 
 
     // Validation ------------------------
@@ -28,6 +31,7 @@ function RegistrationForm() {
         fmname: '',
         lname: '',
         phone: '',
+        otp: '',
         wordno: '',
         tole: '',
     })
@@ -40,19 +44,13 @@ function RegistrationForm() {
     const [selectedDistrict, setSelectedDistrict] = useState(null);
     const [selectedMunicipality, setSelectedMunicipality] = useState(null);
 
-    const [selectedOccupation, setSelectedOccupation] = useState(null)
-    const [selectedPosition, setSelectedPosition] = useState(null)
-
-
     const [error, setError] = useState({
         fmname: '',
-        lname: '',
-        phone: '',
+        lname: '',        
+        otp: '',
         province_type: '',
         district_type: '',
         municipality_type: '',
-        occupation_type: '',
-        position_type: '',
         wordno: '',
         tole: '',
     })
@@ -65,12 +63,7 @@ function RegistrationForm() {
     const validateLname = (Lname) => {
         const lnameRegex = /^[A-Za-z ]+$/;
         return lnameRegex.test(Lname)
-    }
-
-    const validatePhone = (phone) => {
-        const phoneRegex = /^\+9779\d{9}$/;
-        return phoneRegex.test(phone)
-    }
+    }    
 
     const validateWordno = (wordno) => {
         const wordnoRegex = /^\d+$/;
@@ -81,6 +74,15 @@ function RegistrationForm() {
         const toleRegex = /^[A-Za-z ]+$/;
         return toleRegex.test(tole)
     }
+
+    const validatePhone = (phone) => {
+        const phoneRegex = /^9\d{9}$/;
+        return phoneRegex.test(phone)
+    }
+
+    const toggleRemainingServices = () => {
+        setShowRemainingServices(!showRemainingServices);
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -106,15 +108,7 @@ function RegistrationForm() {
         if (!validateLname(userr.lname)) {
             setError((preError) => ({ ...preError, lname: 'Invalid Last Name' }))
             return;
-        }
-        
-
-        if (!validatePhone(userr.phone)) {
-            setError((preError) => ({ ...preError, phone: 'Invalid Phone number' }))
-            alert('Invalid Phone number')
-            return;
-        }
-
+        }      
 
         if (selectedProvince === null) {
             setError((prevErrors) => ({ ...prevErrors, province_type: 'Province is required' }));
@@ -139,33 +133,29 @@ function RegistrationForm() {
             return;
         }
 
-        if (selectedOccupation === null) {
-            setError((prevErrors) => ({ ...prevErrors, occupation_type: 'Occupation is required' }));
-            return;
-        }
-
-        if (selectedPosition === null) {
-            setError((prevErrors) => ({ ...prevErrors, position_type: 'Position is required' }));
+        if (!validatePhone(userr.phone)) {
+            setError((preError) => ({ ...preError, phone: 'Invalid Phone number' }))
+            alert('Invalid Phone number')
             return;
         }
 
         setUser({
             fmname: '',
-            lname: '',
-            phone: '',
+            lname: '',            
             wordno: '',
-            tole: ''
+            tole: '',
+            phone: '',
         })
 
         setError({
             fmname: '',
             lname: '',
-            phone: '',
             province_type: '',
             district_type: '',
             municipality_type: '',
             wordno: '',
-            tole: ''
+            tole: '',
+            phone: '',
         })
 
         alert('submit')
@@ -185,6 +175,7 @@ function RegistrationForm() {
 
 
     const sendOtp = async () => {
+
         const currentTime = new Date();
 
         if (!lastRequestTime || currentTime.getTime() - lastRequestTime.getTime() >= 2 * 60 * 1000) {
@@ -194,8 +185,7 @@ function RegistrationForm() {
                 document.body.appendChild(recaptchaContainer);
 
                 const recaptcha = new RecaptchaVerifier(auth, recaptchaContainer, {});
-                const confirmation = await signInWithPhoneNumber(auth, phone, recaptcha);
-
+                const confirmation = await signInWithPhoneNumber(auth, userr.phone, recaptcha);
                 // Save the ConfirmationResult object in state
                 setUser(confirmation);
                 console.log(confirmation);
@@ -217,15 +207,19 @@ function RegistrationForm() {
 
     const verifyOtp = async () => {
         try {
-            const data = await user.confirm(otp);
-            toast.success("OTP Verified ! Request the Demo")
+            const data = await user.confirm(userr.otp);
+            toast.success("OTP Verified! Request the Demo");
+
+            setPhoneHide(false)
 
             console.log(data);
         } catch (err) {
-            setMessage("Invalid OTP");
+            setError((prevError) => ({ ...prevError, otp: 'Invalid OTP' }));
             console.error(err);
         }
-    }
+    };
+
+
 
     return (
         <>
@@ -234,16 +228,17 @@ function RegistrationForm() {
                 <div className="row">
                     <div className="card">
                         <div className="card-body px-5">
-                            <h2 className="cart-title text-center pb-3">Welcome</h2>
-                            <form onSubmit={handleForm}>
-                                <div className="mb-4">
+                            <h2 className="cart-title text-center text-primary fw-bold pt-5 pb-2">Register Now</h2>
+                            <form onSubmit={handleForm} className=''>
+                                <div className="mb-2">
                                     <div className="row g-2">
                                         {/* First and Middle name */}
-                                        <div className="col-sm-6">
+                                        <div className="col-sm-12">
+                                            <small>First and Middle Name <span className="text-danger">*</span></small>
                                             <input
                                                 type="text"
-                                                className={`form-control ${error.fmname ? 'is-invalid' : ''}`}
-                                                placeholder='Enter first and middle name'
+                                                className={`form-control custom-reg-form ${error.fmname ? 'is-invalid' : ''}`}
+                                                placeholder='enter first and middle name'
                                                 name='fmname'
                                                 onChange={handleInputChange}
                                             />
@@ -251,10 +246,11 @@ function RegistrationForm() {
                                         </div>
 
                                         {/* Last name */}
-                                        <div className="col-sm-6">
+                                        <div className="col-sm-12">
+                                            <small>Last Name <span className="text-danger">*</span></small>
                                             <input
                                                 type="text"
-                                                className={`form-control ${error.lname ? 'is-invalid' : ''}`}
+                                                className={`form-control custom-reg-form ${error.lname ? 'is-invalid' : ''}`}
                                                 placeholder='Enter last name'
                                                 name='lname'
                                                 onChange={handleInputChange}
@@ -264,63 +260,15 @@ function RegistrationForm() {
                                     </div>
                                 </div>
 
+                                {/*  */}
+
                                 <div className="mb-2">
-                                    <div className="row g-2">
-                                        {/* Phone Number */}
-                                        <div className="col-md-6">
-                                            <PhoneInput
-                                                country={'np'}
-                                                className={`react-tel-input ${error.phone ? 'is-invalid' : ''}`}
-                                                onChange={(phone) => setUserr((prevUser) => ({ ...prevUser, phone: "+" + phone }))}
-                                            />
-                                            <div style={{ lineHeight: '1' }}>
-                                                <small className='text-warning'><i>* Please verify your mobile number before requesting a demo account</i></small>
-                                            </div>
-                                            {/* {error.phone && <div id="phone-error" className="invalid-feedback">{error.phone}</div>} */}
-                                        </div>
-
-                                        {/* Send OTP Button */}
-                                        <div className="col-md-6">
-                                            <div className="row">
-                                                <div className="col-md-5">
-                                                    <button type="button" class="btn btn-outline-primary" onClick={sendOtp}>Send OTP</button>
-                                                    <div id="recaptcha"></div>
-                                                    <ToastContainer />
-                                                </div>
-
-                                                {
-                                                    (verifyStatus)
-                                                        ?
-                                                        <div className="col-md-7">
-                                                            <div class="input-group">
-                                                                <input
-                                                                    type="number"
-                                                                    id="otp"
-                                                                    className={`form-control ${message !== '' ? 'is-invalid' : ''}`}
-                                                                    value={otp}
-                                                                    placeholder="Enter OTP"
-                                                                    onChange={(e) => setOtp(e.target.value)}
-                                                                />
-
-                                                                <button class="btn btn-outline-primary" type="button" id="button-addon2" onClick={verifyOtp}>Verify</button>
-                                                                {message !== '' && <div className="invalid-feedback">{message}</div>}
-
-                                                            </div>
-                                                        </div>
-                                                        :
-                                                        ""
-                                                }
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="mb-4">
                                     <div className="row g-2">
                                         {/* Province */}
                                         <div className="col-sm-6">
+                                            <small>Province <span className="text-danger">*</span></small>
                                             <select
-                                                className={`form-select ${error.province_type ? 'is-invalid' : ''}`}
+                                                className={`form-select custom-reg-form ${error.province_type ? 'is-invalid' : ''}`}
                                                 name="province_type"
                                                 aria-label="Province"
                                                 onChange={(e) => {
@@ -335,7 +283,7 @@ function RegistrationForm() {
                                                 </option>
                                                 {provinces.map((province) => (
                                                     <option key={province.id} value={province.id}>
-                                                        {province.name}
+                                                        {province.province_name}
                                                     </option>
                                                 ))}
                                             </select>
@@ -346,8 +294,9 @@ function RegistrationForm() {
 
                                         {/* District */}
                                         <div className="col-sm-6">
+                                            <small>District <span className="text-danger">*</span></small>
                                             <select
-                                                className={`form-select ${error.district_type ? 'is-invalid' : ''}`}
+                                                className={`form-select custom-reg-form ${error.district_type ? 'is-invalid' : ''}`}
                                                 name="district_type"
                                                 aria-label="District"
                                                 // onChange={handleDistrictChange}
@@ -375,12 +324,13 @@ function RegistrationForm() {
                                     </div>
                                 </div>
 
-                                <div className="mb-4">
+                                <div className="mb-2">
                                     <div className="row g-2">
                                         {/* Municipality */}
                                         <div className="col-sm-6">
+                                            <small>Municipality <span className="text-danger">*</span></small>
                                             <select
-                                                className={`form-select ${error.municipality_type ? 'is-invalid' : ''}`}
+                                                className={`form-select custom-reg-form ${error.municipality_type ? 'is-invalid' : ''}`}
                                                 name="municipality_type"
                                                 aria-label="Municipality"
                                                 onChange={(e) => {
@@ -405,9 +355,10 @@ function RegistrationForm() {
                                         </div>
                                         {/* Word no */}
                                         <div className="col-sm-6">
+                                            <small>Ward No <span className="text-danger">*</span></small>
                                             <input
                                                 type="text"
-                                                className={`form-control ${error.wordno ? 'is-invalid' : ''}`}
+                                                className={`form-control custom-reg-form ${error.wordno ? 'is-invalid' : ''}`}
                                                 placeholder='Ward no'
                                                 name='wordno'
                                                 // value={userr.wordno}
@@ -418,13 +369,14 @@ function RegistrationForm() {
                                     </div>
                                 </div>
 
-                                <div className="mb-4">
+                                <div className="mb-2">
                                     <div className="row g-2">
                                         {/* Tole */}
-                                        <div className="col-md-6">
+                                        <div className="col-md-12">
+                                            <small>Tole <span className="text-danger">*</span></small>
                                             <input
                                                 type="text"
-                                                className={`form-control ${error.tole ? 'is-invalid' : ''}`}
+                                                className={`form-control custom-reg-form ${error.tole ? 'is-invalid' : ''}`}
                                                 placeholder='Tole'
                                                 name='tole'
                                                 // value={userr.wordno}
@@ -432,111 +384,233 @@ function RegistrationForm() {
                                             />
                                             {error.tole && <div id="name-error" className="invalid-feedback">{error.tole}</div>}
                                         </div>
-                                        {/* Occupation */}
-                                        <div className="col-sm-6">
-                                            <select
-                                                className={`form-select ${error.occupation_type ? 'is-invalid' : ''}`}
-                                                name="occupation_type"
-                                                aria-label="Occupation"
-                                                onChange={(e) => {
-                                                    setSelectedOccupation(e.target.value);
-                                                    setError((prevErrors) => ({ ...prevErrors, occupation_type: '' }));
-                                                }}
-                                                value={selectedOccupation}
-                                            >
-                                                <option selected aria-readonly>Select Occupation</option>
-                                                <option value="1">Type 1</option>
-                                                <option value="1">Type 2</option>
-                                                <option value="1">Type 3</option>
-                                                <option value="1">Type 3</option>
-                                            </select>
-                                            {error.occupation_type && (
-                                                <div className="invalid-feedback">{error.occupation_type}</div>
-                                            )}
+
+                                    </div>
+                                </div>
+
+                                <div className="mb-2">
+                                    <div className="row g-2">
+                                        {/* Phone */}
+                                        <div className="col-md-6">
+                                            <small>Phone <span className="text-danger">*</span></small>
+                                            <input
+                                                type="text"
+                                                className={`form-control custom-reg-form ${error.phone ? 'is-invalid' : ''}`}
+                                                placeholder='9xxxxxxxxx'
+                                                name='phone'
+                                                // value={userr.wordno}
+                                                onChange={handleInputChange}
+                                            />
+                                            <div style={{ lineHeight: '1' }}>
+                                                <small className='text-warning'>* Please verify your mobile number before requesting a demo account</small>
+                                            </div>
+
+                                            {error.phone && <div id="name-error" className="invalid-feedback">{error.tole}</div>}
+                                        </div>
+                                        <div className="col-md-6">
+                                            <div className="row">
+                                                <div className="col-md-5 mt-4">
+                                                    <small></small>
+                                                    <button type="button" class="btn btn-outline-primary btn-design" onClick={sendOtp}>Send OTP</button>
+                                                    <div id="recaptcha"></div>
+                                                    <ToastContainer />
+                                                </div>
+
+                                                {
+                                                    (verifyStatus)
+                                                        ?
+                                                        <div className="col-md-7">
+                                                            <div class="input-group">
+                                                                <input
+                                                                    className={`form-control ${error.otp ? 'is-invalid' : ''}`}
+                                                                    name="otp"
+                                                                    arial-label="Otp"
+                                                                    type="number"
+                                                                    id="otp"
+                                                                    onChange={handleInputChange}
+                                                                    // value={otp}
+                                                                    placeholder="Enter OTP"
+                                                                />
+
+                                                                <button class="btn btn-outline-primary mt-4" type="button" id="button-addon2" onClick={verifyOtp}>Verify</button>
+                                                                {error.otp && <div id="name-error" className="invalid-feedback">{error.otp}</div>}
+                                                            </div>
+                                                        </div>
+                                                        :
+                                                        ""
+                                                }
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="mb-4">
-                                    {/* Position */}
-                                    <div className="col-sm-6">
-                                        <select
-                                            className={`form-select ${error.position_type ? 'is-invalid' : ''}`}
-                                            name="occupation_type"
-                                            aria-label="Occupation"
-                                            onChange={(e) => {
-                                                setSelectedPosition(e.target.value);
-                                                setError((prevErrors) => ({ ...prevErrors, position_type: '' }));
-                                            }}
-                                            value={selectedPosition}
-                                        >
-                                            <option selected aria-readonly>Select Occupation</option>
-                                            <option value="1">Type 1</option>
-                                            <option value="1">Type 2</option>
-                                            <option value="1">Type 3</option>
-                                            <option value="1">Type 3</option>
-                                        </select>
-                                        {error.position_type && (
-                                            <div className="invalid-feedback">{error.position_type}</div>
-                                        )}
+
+                                <div className="mb-2">
+                                    <div className="row g-2">
+                                        {/* Phone Number */}
+                                        {/* <div className="col-md-6">
+                                        <small>Phone No <span className="text-danger">*</span></small>
+                                            {phoneHide? (<PhoneInput
+                                                country={'np'}
+                                                className={`react-tel-input ${error.phone ? 'is-invalid' : ''}`}
+                                                onChange={(phone) => setUserr((prevUser) => ({ ...prevUser, phone: "+" + phone }))}
+                                            />): (<PhoneInput
+                                                country={'np'}
+                                                className={`react-tel-input ${error.phone ? 'is-invalid' : ''}`}
+                                                onChange={(phone) => setUserr((prevUser) => ({ ...prevUser, phone: "+" + phone }))}
+                                                value={userr.phone}
+                                                disabled
+                                            />)}
+                                            <div style={{ lineHeight: '1' }}>
+                                                <small className='text-secondary'><i>* Please verify your mobile number before requesting a demo account</i></small>
+                                            </div>
+                                            {error.phone && <div id="phone-error" className="invalid-feedback">{error.phone}</div>}
+                                        </div> */}
+
+                                        {/* Send OTP Button */}
+                                        {/* <div className="col-md-6">
+                                            <div className="row">
+                                                <div className="col-md-5 mt-4">
+                                                    <small></small>
+                                                    <button type="button" class="btn btn-outline-primary" onClick={sendOtp}>Send OTP</button>
+                                                    <div id="recaptcha"></div>
+                                                    <ToastContainer />
+                                                </div>
+
+                                                {
+                                                    (verifyStatus)
+                                                        ?
+                                                        <div className="col-md-7">
+                                                            <div class="input-group">
+                                                                <input
+                                                                    className={`form-control ${error.otp ? 'is-invalid' : ''}`}
+                                                                    name="otp"
+                                                                    arial-label="Otp"
+                                                                    type="number"
+                                                                    id="otp"
+                                                                    onChange={handleInputChange}
+                                                                    // value={otp}
+                                                                    placeholder="Enter OTP"
+                                                                />
+
+                                                                <button class="btn btn-outline-primary" type="button" id="button-addon2" onClick={verifyOtp}>Verify</button>
+                                                                {error.otp && <div id="name-error" className="invalid-feedback">{error.otp}</div>}
+                                                            </div>
+                                                        </div>
+                                                        :
+                                                        ""
+                                                }
+                                            </div>
+                                        </div> */}
                                     </div>
                                 </div>
 
-                                <div className="mb-4">
-                                    {/* Services */}
-                                    <table className="custom-table">
+                                {/* Services */}
+                                <div className="mb-3">
+                                    <small>Factors influencing the cost of system</small> 
+                                    {/* service table */}
+                                    <table className="table custom-table table-bordered border-primary">
                                         <thead>
-                                            <tr>
-                                                <th>Choose Services</th>
-                                                <th>Amount</th>
+                                            <tr className='text-center' style={{backgroundColor:"#eaebf7"}}>
+                                                <th>Title</th>
+                                                <th>Details</th>
+                                                <th>Factors</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {/* Service 1 */}
                                             <tr>
-                                                <td>
-                                                    <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" checked />
-                                                        <label className="form-check-label"> Default Service </label> <br />
-                                                        <small className='px-3'>lorem ipsum dolor sit amet consectetur, adipisicing elit. Vitae, cupiditate?</small>
-                                                    </div>
-                                                </td>
-                                                <td>Rs. 500</td>
+                                                <td rowSpan={4}>Implementation Scope</td>
+                                                <td rowSpan={4}>The scale and complexity of the DHIS2 implementation, including the number of users, facilities, and data points, can impact the overall cost.</td>
+                                                <td>Small-scale</td>
                                             </tr>
-                                            <tr>
-                                                <td>
-                                                    <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" />
-                                                        <label className="form-check-label"> Service 1 </label> <br />
-                                                        <small className='px-3'>lorem ipsum dolor sit amet consectetur, adipisicing elit. Vitae, cupiditate?</small>
-                                                    </div>
-                                                </td>
-                                                <td>Rs. 200</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" />
-                                                        <label className="form-check-label"> Service 2 </label> <br />
-                                                        <small className='px-3'>lorem ipsum dolor sit amet consectetur, adipisicing elit. Vitae, cupiditate?</small>
-                                                    </div>
-                                                </td>
-                                                <td>Rs. 100</td>
-                                            </tr>
+                                            <tr><td>Medium-scale</td></tr>
+                                            <tr><td>Large-scale</td></tr>
+                                            <tr><td>HMIS Programs</td></tr>
 
+                                            {/* Remaining Services */}
+                                            {showRemainingServices && (
+                                                <>
+                                                    {/* Service 2 */}
+                                                    <tr>
+                                                        <td rowSpan={4}>Customization Requirements</td>
+                                                        <td rowSpan={4}>Tailoring the DHIS2 platform to meet specific organizational needs may involve additional development work, and the level of customization required can influence the pricing.</td>
+                                                        <td>Basic</td>
+                                                    </tr>
+                                                    <tr><td>Moderate</td></tr>
+                                                    <tr><td>Extensive</td></tr>
+                                                    <tr><td>HMIS Programs</td></tr>
+
+                                                    {/* Service 3 */}
+                                                    <tr>
+                                                        <td rowSpan={2}>Training and Support</td>
+                                                        <td rowSpan={2}>Training and support services provided by Amakomaya can be part of the pricing structure. This may include initial training sessions, ongoing support, and access to resources.</td>
+                                                        <td>Training sessions</td>
+                                                    </tr>
+                                                    <tr><td>Ongoing support</td></tr>
+
+                                                    {/* Service 4 */}
+                                                    <tr>
+                                                        <td rowSpan={2}>Hosting and Infrastructure</td>
+                                                        <td rowSpan={2}>Depending on the client's preferences, Amakomaya may offer hosting services for DHIS2</td>
+                                                        <td>Cloud-based hosting</td>
+                                                    </tr>
+                                                    <tr><td>On-premises hosting</td></tr>
+
+                                                    {/* Service 5 */}
+                                                    <tr>
+                                                        <td rowSpan={2}>Consultation and Analysis</td>
+                                                        <td rowSpan={2}>Services related to data analysis, reporting, and insights derived from DHIS2 data may be offered, and these could be included in the pricing model.</td>
+                                                        <td>Consultation services</td>
+                                                    </tr>
+                                                    <tr><td>In-depth analysis and reporting</td></tr>
+
+                                                    {/* Service 6 */}
+                                                    <tr>
+                                                        <td rowSpan={2}>Licensing Fees</td>
+                                                        <td rowSpan={2}>While DHIS2 is open-source, there might be costs associated with specific add-ons, extensions, or premium features that are not part of the core open-source platform</td>
+                                                        <td>DHIS2 core (open-source)</td>
+                                                    </tr>
+                                                    <tr><td>Licensing fees for specific add-ons or premium features</td></tr>
+                                                </>
+                                            )}
+                                            <tr style={{border:'none'}}>
+                                                <td colSpan={3} className="text-center" style={{border:'none'}}>
+                                                    <button onClick={toggleRemainingServices} className="btn btn-light">
+                                                        {showRemainingServices ? 'Hide services' : 'Show more service'} <i class="bi bi-chevron-down"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
+
+                                    {/* purpose textarea */}
+                                    <div className="row">
+                                        <div className="col-md-12">
+                                            <small>Enter your main purpose for requesting demo <span className="text-danger">*</span></small>
+                                            <textarea
+                                                type="text"
+                                                className={`form-control custom-reg-form ${error.tole ? 'is-invalid' : ''}`}
+                                                placeholder='Enter your main purpose for requesting demo'
+                                                name='tole'
+                                                // value={userr.wordno}
+                                                onChange={handleInputChange}
+                                                rows="3"
+                                            />
+                                            {error.tole && <div id="name-error" className="invalid-feedback">{error.tole}</div>}
+                                        </div>
+                                    </div>
                                 </div>
 
                                 {/* Request Demo button */}
-                                <div className="mb-4">
+                                <div className="mb-4 text-center">
                                     {
                                         (12345)
                                             ?
-                                            <button type="submit" className="btn btn-primary">Request Demo</button>
+                                            <button type="submit" className="btn btn-primary btn-design">Request Demo</button>
                                             :
                                             <div>
-                                                <button type="submit" className="btn btn-secondary" disabled>Request Demo</button>
+                                                <button type="submit" className="btn btn-secondary btn-design" disabled>Request Demo</button>
                                             </div>
-
                                     }
                                 </div>
                             </form>
@@ -555,10 +629,12 @@ function RegistrationForm() {
                                 }
                             </div>
 
+                            <hr />
                             {/* Video */}
-                            <div className="video">
+                            <div className="video text-center">
                                 <iframe width="560" height="315" src="https://www.youtube.com/embed/FOa54Wm2vO0?si=aBGXMBKMXK3ukFZ6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                             </div>
+                            <hr />
                         </div>
 
                     </div>

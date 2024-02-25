@@ -17,7 +17,7 @@ const PlanSection = () => {
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12 col-md-6 col-lg-6 col-12" data-aos="fade-right" data-aos-upoffset="200">
-                            <div className="mb-4 text-secondary">
+                            <div className="mb-4 text-secondary shadow rounded py-4 ps-4">
                                 <h3 className="text-primary">Calculate Price</h3>
                                 <ul className='premium'>
                                     <li>All HMIS tools custom data tracking</li>
