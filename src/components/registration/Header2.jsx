@@ -17,8 +17,7 @@ const Header2 = () =>{
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 text-center">
                             <li class="nav-item">
                                 {/* <a class="nav-link px-2" aria-current="page" href="#why">Why?</a> */}
-                            </li>
-                            
+                            </li>                            
                         </ul>
                     </div>
                 </div>

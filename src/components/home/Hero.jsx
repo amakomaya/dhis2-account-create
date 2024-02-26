@@ -2,24 +2,21 @@
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useEffect, useRef, useState } from 'react';
-import { Cursor, Typewriter, useTypewriter } from 'react-simple-typewriter';
+import { useTypewriter } from 'react-simple-typewriter';
 import emailjs from '@emailjs/browser';
 
 const Hero = () => {
     const [user, setUser] = useState({
         email: '',
+        organizationType: '',
+        agreeTerms: false
     });
-
-    const [selectedOrgType, setSelectedOrgType] = useState('');
-    const [agreeTerms, setAgreeTerms] = useState(false);
 
     const [errors, setErrors] = useState({
         email: '',
-        phone: '',
-        organization_type: '',
+        organizationType: '',
         agreeTerms: '',
     });
-
 
     const validateEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -42,6 +39,8 @@ const Hero = () => {
     const sendEmail = (e) => {
         e.preventDefault();
 
+
+
         // Validate email
         if (user.email === '') {
             setErrors((prevErrors) => ({ ...prevErrors, email: 'Email is required' }));
@@ -54,19 +53,20 @@ const Hero = () => {
         }
 
         // Validate organization type
-        if (selectedOrgType === '') {
-            setErrors((prevErrors) => ({ ...prevErrors, organization_type: 'Organization type is required' }));
+        if (user.organizationType === '') {
+            setErrors((prevErrors) => ({ ...prevErrors, organizationType: 'Organization type is required' }));
             return;
         }
 
+        alert(user.agreeTerms)
+
         // Validate terms and conditions checkbox
-        if (!agreeTerms) {
+        if (!user.agreeTerms) {
             setErrors((prevErrors) => ({ ...prevErrors, agreeTerms: 'Please agree to terms and conditions' }));
             return;
         }
 
         // If all validations pass
-        alert(user.email)
         emailjs
             .sendForm('service_lzv5uvt', 'template_82rwkla', form.current, {
                 publicKey: 'QgNcDf6lLYy9ePtdy',
@@ -77,13 +77,12 @@ const Hero = () => {
                     setMsg("Please verify your email for account activation")
                     setUser({
                         email: '',
-                        phone: '',
+                        organizationType: '',
+                        agreeTerms: false
                     });
-                    setSelectedOrgType('');
-                    setAgreeTerms(false);
                     setErrors({
                         email: '',
-                        organization_type: '',
+                        organizationType: '',
                         agreeTerms: '',
                     });
                 },
@@ -134,26 +133,16 @@ const Hero = () => {
                                 <div className="row g-3">
                                     <div className="col-md-12">
                                         <input type="email" className={`form-control custom-form ${errors.email ? 'is-invalid' : ''}`} id='email' name="email" onChange={handleInputChange} value={user.email}
-                                            placeholder="Enter your email address"/>
+                                            placeholder="Enter your email address" />
                                         {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                                     </div>
 
-                                    {/* <div className="col-md-12">
-                                        <input type="text" className={`form-control custom-form ${errors.phone ? 'is-invalid' : ''}`} id='phone' name="phone" onChange={handleInputChange} value={user.phone}
-                                            placeholder="Phone number" />
-                                        {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
-                                    </div> */}
-
-
                                     <div className="col-md-12">
                                         <select
-                                            class={`form-select custom-form ${errors.organization_type ? 'is-invalid' : ''}`}
-                                            name="organization_type"
-                                            onChange={(e) => {
-                                                setSelectedOrgType(e.target.value);
-                                                setErrors((prevErrors) => ({ ...prevErrors, organization_type: '' }));
-                                            }}
-                                            value={selectedOrgType}>
+                                            class={`form-select custom-form ${errors.organizationType ? 'is-invalid' : ''}`}
+                                            name="organizationType"
+                                            onChange={(e) => handleInputChange(e)}
+                                            value={user.organizationType}>
                                             <option selected aria-readonly>Select Organization type</option>
                                             <option value="Health">Health</option>
                                             <option value="Education">Education</option>
@@ -164,8 +153,8 @@ const Hero = () => {
                                             <option value="Business Analysis">Business Analysis</option>
                                             <option value="Others">Others</option>
                                         </select>
-                                        {errors.organization_type && (
-                                            <div className="invalid-feedback">{errors.organization_type}</div>
+                                        {errors.organizationType && (
+                                            <div className="invalid-feedback">{errors.organizationType}</div>
                                         )}
                                     </div>
 
@@ -174,14 +163,16 @@ const Hero = () => {
                                             <input
                                                 className="form-check-input"
                                                 type="checkbox"
-                                                value=""
+                                                name="agreeTerms"
                                                 id="flexCheckChecked"
-                                                checked={agreeTerms}
-                                                onChange={() => setAgreeTerms(!agreeTerms)}
+                                                checked={user.agreeTerms}
+                                                onChange={handleInputChange}
                                             />
-                                            <small>Agree to all terms and conditions</small>
+                                            <label className="form-check-label" htmlFor="flexCheckChecked">
+                                                <small>Agree to all terms and conditions</small>
+                                            </label>
                                         </div>
-                                        {agreeTerms === false && (
+                                        {user.agreeTerms === false && (
                                             <div className="invalid-feedback">{errors.agreeTerms}</div>
                                         )}
                                     </div>

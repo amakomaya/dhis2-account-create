@@ -1,13 +1,5 @@
 
 
-1. New div
-    div content:
-    ------------------
-    Looking for a DHIS2 consultant?
-
-    Our team has extensive expertise in DHIS2, and we can assist with setting up, configuring, and maintaining Data Management Servers for your organization.
-    
-    1 button (contact us now) -> redirect support section
 
 
 
@@ -22,3 +14,49 @@ What i need?
 2. Email Template
     - Rajendra Sir
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1. New div
+    div content:
+    ------------------
+    Looking for a DHIS2 consultant?
+
+    Our team has extensive expertise in DHIS2, and we can assist with setting up, configuring, and maintaining Data Management Servers for your organization.
+    
+    1 button (contact us now) -> redirect support section
