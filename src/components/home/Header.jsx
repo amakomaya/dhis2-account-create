@@ -1,10 +1,19 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 
 const Header = () => {
+
+    const [sticky, setSticky] = useState(false)
+    useEffect(()=>{
+        window.addEventListener('scroll', ()=>{
+            window.scrollY > 50 ? setSticky(true) : setSticky(false);
+        })
+    }, []);
+
     return (
         <>
-            <nav class="navbar sticky-top navbar-expand-lg py-4">
+            <nav class={`navbar sticky-top navbar-expand-lg py-4 ${sticky ? 'dark-nav': ''}`}>
                 <div class="container">
                     <div class="">
                         <Link to="/"><img src="./assets/logo_5.png" alt="Logo" height="50" class="d-inline-block align-top"/></Link>

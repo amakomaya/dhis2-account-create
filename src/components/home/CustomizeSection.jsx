@@ -15,7 +15,6 @@ const CustomizeSection = () => {
                 <div class="container pb-5">
                     <div class="text-center py-5" data-aos="fade-up" data-aos-upoffset="200">
                         <h3 class="heading-text">Customization Process</h3>
-
                         <hr class="w-25 m-auto" />
                     </div>
 

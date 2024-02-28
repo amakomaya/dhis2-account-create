@@ -56,54 +56,7 @@ function FAQSection() {
                     );
                   })}
 
-                  {/* <div className="accordion-item">
-                    <h2 className="accordion-header">
-                      <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Why Should we pay for DHIS2?
-                      </button>
-                    </h2>
-                    <div id="collapseOne" className="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-                      <div className="accordion-body">
-                        <p>Data Management Solution for HMIS in Nepal using DHIS2: Register, Cards, monthly reports goes beyond doing just the basic and offering extra services to improve management, stability, security, performance etc.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="accordion-item">
-                    <h2 className="accordion-header">
-                      <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        How our data Sure?
-                      </button>
-                    </h2>
-                    <div id="collapseTwo" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                      <div className="accordion-body">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis ducimus cum totam fugiat. Expedita maxime repudiandae aliquid qui autem assumenda aut vero numquam, alias modi? Quis ipsum blanditiis iusto totam saepe amet, assumenda illo quos voluptatem dolorem quisquam dolores id beatae. Minus quasi aperiam optio dolore, vero pariatur quisquam est?</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="accordion-item">
-                    <h2 className="accordion-header">
-                      <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        Who do I contact for billing?
-                      </button>
-                    </h2>
-                    <div id="collapseThree" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                      <div className="accordion-body">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempore harum alias nobis earum. Esse doloremque, earum fugit dignissimos minima perferendis quas atque voluptas illum ab? Perspiciatis perferendis consequuntur accusamus minima et atque vero! Sapiente tenetur, debitis quo quidem provident consequuntur autem fuga reprehenderit corporis eos laborum quaerat neque iusto veniam.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="accordion-item">
-                    <h2 className="accordion-header">
-                      <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                        Who do I contact for billing?
-                      </button>
-                    </h2>
-                    <div id="collapseFour" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                      <div className="accordion-body">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempore harum alias nobis earum. Esse doloremque, earum fugit dignissimos minima perferendis quas atque voluptas illum ab? Perspiciatis perferendis consequuntur accusamus minima et atque vero! Sapiente tenetur, debitis quo quidem provident consequuntur autem fuga reprehenderit corporis eos laborum quaerat neque iusto veniam.</p>
-                      </div>
-                    </div>
-                  </div> */}
+
 
 
                 </div>

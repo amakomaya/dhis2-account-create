@@ -252,7 +252,7 @@ function RegistrationForm() {
                                             <input
                                                 type="text"
                                                 className={`form-control custom-reg-form ${error.fmname ? 'is-invalid' : ''}`}
-                                                placeholder='enter first and middle name'
+                                                placeholder='Enter first and middle name'
                                                 name='fmname'
                                                 onChange={handleInputChange}
                                             />
@@ -319,7 +319,7 @@ function RegistrationForm() {
                                                 value={userr.selectedDistrict}
                                             >
                                                 <option selected disabled>
-                                                    District
+                                                    Select District
                                                 </option>
                                                 {userr.selectedProvince &&
                                                     districtsByProvince[userr.selectedProvince].map((district) => (
@@ -351,7 +351,7 @@ function RegistrationForm() {
                                                 value={userr.selectedMunicipality}
                                             >
                                                 <option selected disabled>
-                                                    Municipality
+                                                    Select Municipality
                                                 </option>
                                                 {userr.selectedDistrict &&
                                                     municipalitiesByDistrict[userr.selectedDistrict].map((municipality) => (
@@ -370,7 +370,7 @@ function RegistrationForm() {
                                             <input
                                                 type="text"
                                                 className={`form-control custom-reg-form ${error.wordno ? 'is-invalid' : ''}`}
-                                                placeholder='Ward no'
+                                                placeholder='Enter Ward no'
                                                 name='wordno'
                                                 onChange={handleInputChange}
                                             />
@@ -388,7 +388,7 @@ function RegistrationForm() {
                                                 type="text"
                                                 name="tole"
                                                 className={`form-control custom-reg-form ${error.tole ? 'is-invalid' : ''}`}
-                                                placeholder='Tole'
+                                                placeholder='Enter Tole'
                                                 onChange={handleInputChange}
                                             />
                                             {error.tole && <div id="name-error" className="invalid-feedback">{error.tole}</div>}
@@ -443,10 +443,10 @@ function RegistrationForm() {
                                                                         className={`form-control custom-reg-form ${error.otp ? 'is-invalid' : ''}`}
                                                                         name="otp"
                                                                         arial-label="Otp"
-                                                                        type="number"
+                                                                        type="text"
                                                                         id="otp"
                                                                         onChange={handleInputChange}
-                                                                        placeholder=".............."
+                                                                        placeholder="x x x x x"
                                                                     />
 
 
