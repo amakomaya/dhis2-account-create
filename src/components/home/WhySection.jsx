@@ -59,9 +59,7 @@ const WhySection = () => {
                     </div>
                 </div>
             </section>
-
         </>
     )
 }
-
 export default WhySection

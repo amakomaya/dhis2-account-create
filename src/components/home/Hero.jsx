@@ -39,8 +39,6 @@ const Hero = () => {
     const sendEmail = (e) => {
         e.preventDefault();
 
-
-
         // Validate email
         if (user.email === '') {
             setErrors((prevErrors) => ({ ...prevErrors, email: 'Email is required' }));
@@ -57,8 +55,6 @@ const Hero = () => {
             setErrors((prevErrors) => ({ ...prevErrors, organizationType: 'Organization type is required' }));
             return;
         }
-
-        alert(user.agreeTerms)
 
         // Validate terms and conditions checkbox
         if (!user.agreeTerms) {
@@ -189,5 +185,4 @@ const Hero = () => {
         </>
     )
 }
-
 export default Hero;

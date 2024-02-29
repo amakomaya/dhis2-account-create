@@ -10,7 +10,7 @@ const PlanSection = () => {
         <>
             <section id="plan" className="mt-5">
                 <div className="text-center mb-5" data-aos="fade-up" data-aos-upoffset="200">
-                    <h1 className="heading-text">Plans of DHIS2</h1>
+                    <h3 class="heading-text">Plans of DHIS2</h3>
                     <hr className="w-25 m-auto text-secondary" />
                 </div>
 

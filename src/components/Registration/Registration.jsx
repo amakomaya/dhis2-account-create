@@ -2,24 +2,19 @@
 import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import PhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/lib/style.css'
-import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
-import { auth } from '../firebase/Setup';
-import Header2 from './Header2';
 import provincesData from '../../data/provincesData';
 import districtsData from '../../data/districtsData';
 import municipalitiesData from '../../data/municipalitiesData';
+import './Registration.css';
+import Navbar2 from './Navbar2';
 
-function RegistrationForm() {
+function Registration() {
 
-    const [user, setUser] = useState(null);
     const [verifyStatus, setVerifyStatus] = useState(false);
+
     const [lastRequestTime, setLastRequestTime] = useState(null);
 
     const [phoneHide, setPhoneHide] = useState(true);
-
-    const [status, setStatus] = useState(false);
 
     const [showRemainingServices, setShowRemainingServices] = useState(false);
 
@@ -127,8 +122,6 @@ function RegistrationForm() {
             return;
         }
 
-        
-
         if (!validateTole(userr.tole)) {
             setError((preError) => ({ ...preError, tole: 'Invalid tole' }))
             return;
@@ -145,7 +138,7 @@ function RegistrationForm() {
             return;
         }
 
-        setUser({
+        setUserr({
             fmname: '',
             lname: '',
             province_type: '',
@@ -169,7 +162,7 @@ function RegistrationForm() {
             purpose: '',
         })
 
-        alert('submit')
+        alert('Your request is successfully submit ! Please check your email.')
     }
     // -----------------------------------
 
@@ -197,23 +190,30 @@ function RegistrationForm() {
 
         if (!lastRequestTime || currentTime.getTime() - lastRequestTime.getTime() >= 2 * 60 * 1000) {
             // If the user hasn't clicked in the last 2 minutes or it's the first click
-            try {
-                const recaptchaContainer = document.createElement('div');
-                document.body.appendChild(recaptchaContainer);
 
-                const recaptcha = new RecaptchaVerifier(auth, recaptchaContainer, {});
-                const confirmation = await signInWithPhoneNumber(auth, userr.phone, recaptcha);
-                // Save the ConfirmationResult object in state
-                setUser(confirmation);
-                console.log(confirmation);
-                setVerifyStatus(true)
 
-                toast.success("OTP send successfully ! Please check your phone");
-                setLastRequestTime(currentTime);
+            // try {
+            //     const recaptchaContainer = document.createElement('div');
+            //     document.body.appendChild(recaptchaContainer);
 
-            } catch (err) {
-                console.error(err);
-            }
+            //     const recaptcha = new RecaptchaVerifier(auth, recaptchaContainer, {});
+            //     const confirmation = await signInWithPhoneNumber(auth, userr.phone, recaptcha);
+            //     // Save the ConfirmationResult object in state
+            //     setUser(confirmation);
+            //     console.log(confirmation);
+            //     setVerifyStatus(true)
+
+            //     toast.success("OTP send successfully ! Please check your phone");
+            //     setLastRequestTime(currentTime);
+
+            // } catch (err) {
+            //     console.error(err);
+            // }
+
+            setVerifyStatus(true)
+
+            toast.success("OTP send successfully ! Please check your phone");
+            setLastRequestTime(currentTime);
         }
         else {
             // If the user has clicked within the last 2 minutes
@@ -222,22 +222,27 @@ function RegistrationForm() {
     }
 
     const verifyOtp = async () => {
-        try {
-            const data = await user.confirm(userr.otp);
-            toast.success("OTP Verified! Request the Demo");
+        // try {
+        //     const data = await user.confirm(userr.otp);
+        //     toast.success("OTP Verified! Request the Demo");
 
-            setPhoneHide(false)
+        //     setPhoneHide(false)
 
-            console.log(data);
-        } catch (err) {
-            setError((prevError) => ({ ...prevError, otp: 'Invalid OTP' }));
-            console.error(err);
-        }
+        //     console.log(data);
+        // } catch (err) {
+        //     setError((prevError) => ({ ...prevError, otp: 'Invalid OTP' }));
+        //     console.error(err);
+        // }
+
+        toast.success("OTP Verified Successfully! Please Request the Demo");
+
+        setPhoneHide(false)
+        setError((prevError) => ({ ...prevError, otp: 'Invalid OTP' }));
     };
 
     return (
         <>
-            <Header2 />
+            <Navbar2 />
             <div className="my-4 new_container rounded shadow">
                 <div className="row">
                     <div className="card">
@@ -402,22 +407,22 @@ function RegistrationForm() {
                                         {/* Phone */}
                                         <div className="col-md-6">
                                             <small>Phone <span className="text-danger">*</span></small>
-                                            {phoneHide ? 
-                                            (<input
-                                                type="text"
-                                                className={`form-control custom-reg-form ${error.phone ? 'is-invalid' : ''}`}
-                                                placeholder='9xxxxxxxxx'
-                                                name='phone'
-                                                onChange={handleInputChange}
-                                            />) : 
-                                            (<input
-                                                type="text"
-                                                className={`form-control custom-reg-form ${error.phone ? 'is-invalid' : ''}`}
-                                                placeholder='9xxxxxxxxx'
-                                                name='phone'
-                                                onChange={handleInputChange}
-                                                readOnly
-                                            />)}
+                                            {phoneHide ?
+                                                (<input
+                                                    type="text"
+                                                    className={`form-control custom-reg-form ${error.phone ? 'is-invalid' : ''}`}
+                                                    placeholder='9xxxxxxxxx'
+                                                    name='phone'
+                                                    onChange={handleInputChange}
+                                                />) :
+                                                (<input
+                                                    type="text"
+                                                    className={`form-control custom-reg-form ${error.phone ? 'is-invalid' : ''}`}
+                                                    placeholder='9xxxxxxxxx'
+                                                    name='phone'
+                                                    onChange={handleInputChange}
+                                                    readOnly
+                                                />)}
                                             <div style={{ lineHeight: '1' }}>
                                                 <small className='text-warning'>* Please verify your mobile number before requesting a demo account</small>
                                             </div>
@@ -433,12 +438,12 @@ function RegistrationForm() {
                                                 </div>
 
                                                 {
-                                                    (123) //verifyStatus
+                                                    (verifyStatus)
                                                         ?
                                                         <div className="col-md-7">
                                                             <div class="row">
                                                                 <div className="col-md-7">
-                                                                <small>Enter OTP <span className="text-danger">*</span></small>
+                                                                    <small>Enter OTP <span className="text-danger">*</span></small>
                                                                     <input
                                                                         className={`form-control custom-reg-form ${error.otp ? 'is-invalid' : ''}`}
                                                                         name="otp"
@@ -466,65 +471,7 @@ function RegistrationForm() {
                                     </div>
                                 </div>
 
-                                <div className="mb-2">
-                                    <div className="row g-2">
-                                        {/* Phone Number */}
-                                        {/* <div className="col-md-6">
-                                        <small>Phone No <span className="text-danger">*</span></small>
-                                            {phoneHide? (<PhoneInput
-                                                country={'np'}
-                                                className={`react-tel-input ${error.phone ? 'is-invalid' : ''}`}
-                                                onChange={(phone) => setUserr((prevUser) => ({ ...prevUser, phone: "+" + phone }))}
-                                            />): (<PhoneInput
-                                                country={'np'}
-                                                className={`react-tel-input ${error.phone ? 'is-invalid' : ''}`}
-                                                onChange={(phone) => setUserr((prevUser) => ({ ...prevUser, phone: "+" + phone }))}
-                                                value={userr.phone}
-                                                disabled
-                                            />)}
-                                            <div style={{ lineHeight: '1' }}>
-                                                <small className='text-secondary'><i>* Please verify your mobile number before requesting a demo account</i></small>
-                                            </div>
-                                            {error.phone && <div id="phone-error" className="invalid-feedback">{error.phone}</div>}
-                                        </div> */}
-
-                                        {/* Send OTP Button */}
-                                        {/* <div className="col-md-6">
-                                            <div className="row">
-                                                <div className="col-md-5 mt-4">
-                                                    <small></small>
-                                                    <button type="button" class="btn btn-outline-primary" onClick={sendOtp}>Send OTP</button>
-                                                    <div id="recaptcha"></div>
-                                                    <ToastContainer />
-                                                </div>
-
-                                                {
-                                                    (verifyStatus)
-                                                        ?
-                                                        <div className="col-md-7">
-                                                            <div class="input-group">
-                                                                <input
-                                                                    className={`form-control ${error.otp ? 'is-invalid' : ''}`}
-                                                                    name="otp"
-                                                                    arial-label="Otp"
-                                                                    type="number"
-                                                                    id="otp"
-                                                                    onChange={handleInputChange}
-                                                                    // value={otp}
-                                                                    placeholder="Enter OTP"
-                                                                />
-
-                                                                <button class="btn btn-outline-primary" type="button" id="button-addon2" onClick={verifyOtp}>Verify</button>
-                                                                {error.otp && <div id="name-error" className="invalid-feedback">{error.otp}</div>}
-                                                            </div>
-                                                        </div>
-                                                        :
-                                                        ""                                                }
-                                            </div>
-                                        </div> */}
-                                    </div>
-                                </div>
-
+                                
                                 {/* Services */}
                                 <div className="mb-3">
                                     <small>Factors influencing the cost of system</small>
@@ -636,20 +583,6 @@ function RegistrationForm() {
                                 </div>
                             </form>
 
-                            {/* Successful message for Demo request */}
-                            <div className="mt-4">
-                                {
-                                    (status)
-                                        ?
-                                        <div class="alert alert-success" role="alert">
-                                            Your request is successfully submit ! Please check your email.
-                                        </div>
-
-                                        :
-                                        ""
-                                }
-                            </div>
-
                             <hr />
                             {/* Video */}
                             <div className="video text-center">
@@ -665,4 +598,4 @@ function RegistrationForm() {
     );
 }
 
-export default RegistrationForm;
+export default Registration;

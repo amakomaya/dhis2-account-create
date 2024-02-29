@@ -2,8 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import RegistrationForm from './components/registration/RegistrationForm.jsx'
-import Home from './components/home/Home.jsx'
+import Home from './Components/home/Home.jsx'
+import Registration from './Components/Registration/Registration.jsx'
 
 const router = createBrowserRouter([
   {
@@ -11,7 +11,7 @@ const router = createBrowserRouter([
     element: <App/>,
     children: [
       {path: '/', element:<Home/>},
-      {path: '/account-activation-form', element:<RegistrationForm/>}
+      {path: '/account-activation-form', element:<Registration/>}
     ]
   }
 ])

@@ -1,0 +1,36 @@
+.new_container{
+    width: 800px;
+    margin: auto;
+}
+
+.custom-table th:nth-child(1),
+.custom-table td:nth-child(1) {
+  width: 20%;
+}
+
+.custom-table th:nth-child(2),
+.custom-table td:nth-child(2) {
+  width: 55%;
+}
+
+.custom-table th:nth-child(3),
+.custom-table td:nth-child(3) {
+  width: 25%;
+}
+.custom-table tr{
+    height: 20px !important;
+}
+
+small{
+  font-size: 12px;
+}
+
+.custom-reg-form{
+    border-radius: 20px;
+    border: 1px solid blue;
+}
+
+
+.btn-design{
+    border-radius: 20px;
+}

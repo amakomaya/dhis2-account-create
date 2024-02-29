@@ -8,6 +8,7 @@ function SupportSection() {
     const form = useRef();
 
     const sendEmail = (e) => {
+        alert('message send successfully !')
         e.preventDefault();
 
         emailjs
@@ -82,12 +83,9 @@ function SupportSection() {
                                 </form>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </section>
-
-
         </>
     )
 }
